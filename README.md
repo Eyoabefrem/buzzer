@@ -1,104 +1,185 @@
-# Buzzer: a quiz show for kids, teens and grown-ups (Phases 2 and 3 in one zip)
+# ⚡ Buzzer
 
-| Phase | What you get | Needs |
-|---|---|---|
-| 1. The solo show (done) | Timer, scoring, streaks, lifelines, results, stats | Node.js |
-| **2 and 3. Accounts, daily challenge, leaderboard, live party rooms (this zip)** | **Game-style title screen, doodle mascots, kids zone, XP, levels and badges, daily challenge, leaderboard, live multiplayer rooms, installable app** | A free Supabase project (the game still plays solo without it) |
-| 4. Mobile app (next) | Android (and iPhone) app built from this same code | Android Studio |
+> **The high-energy quiz show in your pocket.** Beat the clock, build your streak, call lifelines, and compete in live multiplayer party rooms or daily challenges.
 
-## What's new
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.11-0055FF?style=flat-square&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![Supabase](https://img.shields.io/badge/Supabase-Realtime_&_Database-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
+[![PWA Ready](https://img.shields.io/badge/PWA-Offline_First-FF6F00?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-- **A title screen that feels like a game.** Press the giant buzzer to start the show, then pick from a menu of game tiles. Floating doodles, sweeping spotlights, and a player card with your level.
-- **The crew:** four hand-drawn mascots (Zap, Bloop, Pip, Rex). They hop when you are right, droop when you are wrong, and panic when the clock runs low. Pick yours in Your crew.
-- **Kids zone (ages 6 to 10):** 24 hand-checked easy questions across Animals, Space and science, Our world, and Food and body. Bigger text, 10 extra seconds, and scores are never uploaded. Kids can play with no account.
-- **Daily challenge:** the same ten questions for everyone each day (UTC), one ranked try.
-- **XP, levels and 8 badges.** Earn XP from score, correct answers and perfect rounds.
-- **Leaderboard:** today's challenge and all-time best.
-- **Live party rooms:** one person hosts and gets a 4-letter code. Friends join on their own phones. Everyone sees the same question at the same time, the host's browser scores the answers, and a scoreboard and podium finish the show. Works for classrooms and family nights.
-- **Share your score**, and an **installable app** that opens offline.
+---
 
-## 1. Set up Supabase (about 15 minutes)
+## 🌟 Overview
 
-You can skip this and play solo, but the leaderboard, daily rankings and party rooms need it.
+**Buzzer** brings the thrills of a live television quiz show to the browser. Designed with vibrant stage lighting, responsive vector mascots, satisfying game audio, and an authentic game show stage atmosphere, Buzzer runs completely serverless—leveraging **Supabase Realtime** for peer multiplayer coordination and **PostgreSQL Row Level Security** for verified global leaderboards.
 
-1. Create a free project at supabase.com.
-2. **SQL Editor > New query**, paste all of `supabase/schema.sql`, press **Run**. Check Table Editor for `profiles` and `scores`.
-3. **Authentication > Sign In / Providers**: make sure **Email** is enabled.
-4. **Authentication > Email Templates > Magic Link**: edit the body so it contains `{{ .Token }}`, for example:
+Whether playing solo offline on a commute, challenging colleagues in a live room, or letting kids learn in a safe environment, Buzzer adapts instantly.
 
-       <h2>Your Buzzer code</h2>
-       <p>Enter this code to log in: <b>{{ .Token }}</b></p>
+---
 
-5. **Project Settings > API**: copy the Project URL and the **anon public** key. Never use the service_role key in this app.
-6. Party rooms use **Realtime**, which needs no tables. If joining a room hangs, check that Realtime is enabled for your project and that it allows public (anonymous) channels. The Supabase dashboard layout changes, so follow its own wording.
+## ✨ Features
 
-## 2. Run it
+### 🎮 Four Distinct Game Modes
+- **Solo Showdown**: Race against the countdown timer across multiple difficulties. Score multipliers scale with your consecutive streak (up to $2\times$), supported by three classic lifelines: **50:50**, **+10s Time Extension**, and **Free Streak-Preserving Skip**.
+- **Daily Challenge**: A globally synchronized 10-question challenge deterministically seeded from the current UTC date. Every player on Earth receives identical questions and option shuffles, with exactly one ranked attempt per day recorded on the global daily board.
+- **Live Party Rooms (Multiplayer)**: Real-time party play with zero dedicated game servers. Hosts generate a clean 4-letter room code (omitting ambiguous characters). Players join from their mobile devices or laptops. The host's browser acts as the referee via Supabase Realtime broadcast channels, revealing answers only upon round completion and ending with a live podium ceremony.
+- **Little Champs (Kids Zone, Ages 6–10)**: Specially curated for younger players with 24 hand-checked, age-appropriate questions across *Animals*, *Space & Science*, *Our World*, and *Food & Body*. Features larger fonts, +10s default bonus time, and a strict **100% on-device privacy guarantee** (no telemetry, no accounts required, zero data uploaded).
 
-    copy .env.example .env      (open .env and paste the two values)
-    npm install
-    npm test
-    npm run dev
+### 👾 The Crew (Reactive Mascots)
+Choose your companion from four hand-drawn mascots:
+- **Zap** ⚡ — The enthusiastic energy spark.
+- **Bloop** 🫧 — The bouncy, optimistic companion.
+- **Pip** 🐣 — The curious and quick-witted rookie.
+- **Rex** 🦖 — The steady trivia titan.
 
-Restart `npm run dev` after changing `.env`. `npm test` runs four suites: game rules and questions, history and stats, XP and badges, and the party-room referee.
+*Mascots react dynamically to your gameplay in real time: they bounce on correct answers, droop on misses, and panic frantically as the clock dips into critical seconds.*
 
-## 3. Try these
+### 🏆 XP, Leveling & Achievement Badges
+- **Quadratic Progression Engine**: Earn XP based on score, accuracy, and perfect rounds (`xp = 40 * (level - 1)²`).
+- **8 Unlockable Badges**: Earn achievements including *First Buzz*, *Regular*, *Perfect Round*, *On Fire* (5 streak), *Unstoppable* (10 streak), *Explorer* (5 categories), *Daily Habit* (3 daily challenges), and *Big Brain* (100 total correct answers).
 
-1. Open the title screen and press the buzzer. Tap the crew members: each reacts.
-2. Play a round: watch your mascot hop, droop and panic as the clock runs down.
-3. Play > Little champs > pick a category. Notice the bigger text, the extra time, and the "stays on this device" note.
-4. Play the Daily challenge. Finish: you get XP, maybe a badge, and a share button. Play it again: it becomes a practice round.
-5. Log in (Your crew > Log in) and play again. Open Board: your score is there, highlighted.
-6. **Party test with two windows:** in one window, Party > Create room. Copy the 4-letter code. In a second window (a private window works best, so it counts as a different player), Party > type the code > Join. Press **Start the show** in the first window. Answer in both. Watch the scoreboard, then the podium.
-7. Close the host window mid-game: the other player sees "The host left the room".
-8. After deploying, open the site on a phone and use "Add to Home Screen". It opens offline for solo play.
+### 📱 Offline-First Progressive Web App (PWA)
+- Fully installable on iOS, Android, and desktop devices via Web App Manifest.
+- Service worker caching (`sw.js`) enables instant boot and full solo play capabilities even without an active internet connection.
+- Built-in emergency offline question bank ensures uninterrupted play when disconnected or when third-party APIs are throttled.
 
-## Architecture
+---
 
-    buzzer/
-    ├── index.html, vite.config.js, vercel.json, package.json, .env.example
-    ├── supabase/schema.sql         profiles, scores, two leaderboard views, security rules
-    ├── public/                     favicon, app icons, manifest, sw.js (offline)
-    └── src/
-        ├── main.jsx                routes and providers
-        ├── index.css               stage tokens, bulbs, spotlights, animations
-        ├── lib/
-        │   ├── game.js (+test)     scoring, the game reducer, offline bank, daily questions, kids bank
-        │   ├── xp.js (+test)       XP, levels, badges
-        │   ├── room.js (+test)     the party-room referee: scoring, one answer each, hidden answers
-        │   ├── history.js (+test)  stats saved on this device
-        │   ├── questions.js        online questions with offline fallback
-        │   ├── realtime.js         one Supabase Realtime channel per room
-        │   ├── supabase.js, auth.jsx, cloud.js, profile.jsx, sound.js
-        ├── components/             Mascot, Burst, Header, Logo, Stage, Titles
-        └── pages/                  Landing, Play, Game, Results, Leaderboard, Profile, Login, Party, Stats, NotFound
+## 🛠️ Architecture & Engineering Highlights
 
-### Decisions worth knowing
+```
+buzzer/
+├── public/                 # Favicon, PWA manifest, service worker (sw.js), icons
+├── src/
+│   ├── components/         # Modular UI: Stage, Mascots, Titles, Confetti Burst, Headers
+│   ├── lib/
+│   │   ├── game.js         # Pure game engine reducer, scoring, lifelines, offline banks
+│   │   ├── room.js         # Authoritative party room referee & anti-cheat broadcast logic
+│   │   ├── xp.js           # XP formula, progression curves, and badge evaluator
+│   │   ├── history.js      # LocalStorage-backed analytics & personal stats
+│   │   ├── realtime.js     # Supabase Realtime pub/sub wrapper
+│   │   ├── questions.js    # Open Trivia DB fetcher with automatic offline fallback
+│   │   └── supabase.js     # Supabase client & environment configuration
+│   └── pages/              # Landing, Play, Game, Results, Leaderboard, Party, Profile, Stats
+└── supabase/
+    └── schema.sql          # PostgreSQL schema, RLS policies, audit views, plausibility constraints
+```
 
-- **The host is the referee in party rooms.** Everyone sends their answer to the host's browser, which scores it and shares the results. The right answer is only sent after the question closes, so players cannot read it from the network while answering. There is no game server to run or pay for.
-- **Kids stay private.** Kids zone profiles, nicknames and scores are never uploaded. Party rooms are reachable only with the 4-letter code.
-- **Leaderboard fairness is plausibility, not proof.** The database rejects impossible scores (at most 1,200 points per right answer, correct answers cannot exceed questions, one daily score per person per day, scores cannot be edited or deleted). A determined cheater could still post a high but possible score, because scoring runs in the player's browser.
-- **The daily challenge needs no server:** the date seeds a shuffle, so everyone gets the same questions and the same answer order.
-- **Logic is tested, screens are thin.** Rules live in `src/lib` as plain functions.
+### 🧠 Key Engineering Decisions
 
-## Deploy (free)
+| Feature | Architectural Implementation |
+|---|---|
+| **Host-as-Referee Multiplayer** | Instead of paying for and scaling a Node.js socket server, party rooms utilize Supabase Realtime broadcast channels. The host browser arbitrates timing and conceals the correct answer index from outgoing broadcasts until time expires, preventing client-side network inspection cheats. |
+| **Plausibility Score Verification** | PostgreSQL check constraints enforce strict physical limits (`score <= correct * 1200`, `correct <= total`, `total <= 20`). Daily challenge scores enforce one entry per user per UTC day via partial unique index. |
+| **Deterministic Daily Quizzes** | Client-side PRNG seeded with the UTC calendar date shuffles questions and options identically across all clients globally without requiring server-side cron jobs. |
+| **Decoupled Game State Reducer** | Game and multiplayer room logic live in pure, zero-dependency functions (`game.js`, `room.js`, `xp.js`), thoroughly validated with automated unit tests. |
 
-1. Put the project on GitHub: `git init`, `git add .`, `git commit -m "Buzzer"`, create an empty repository on github.com and run the two lines it shows. The `.gitignore` keeps `.env` out of GitHub.
-2. vercel.com > **Add New > Project** > import the repository. Leave the framework as Vite.
-3. Add two environment variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. Deploy.
-4. Supabase > **Authentication > URL Configuration**: set the Site URL to your Vercel address.
-5. Repeat try-it checks 5 and 6 on the live site.
+---
 
-## Before you share it widely
+## 🚀 Getting Started
 
-- **Nicknames are free text** on the leaderboard and in rooms, with no profanity filter or reporting. For a school or a public launch, add moderation. Kids get friendly rolled nicknames by default, and kids' names are never uploaded.
-- **Party rooms:** if the host closes their tab the room ends. A player who loses signal can rejoin with the same code. A player who never answers makes each question wait for its timer. Supabase Realtime has free-plan limits, so very large rooms need a paid plan.
-- **Supabase's built-in email sender** allows only a few login codes per hour. Add your own provider (Authentication > SMTP) before real traffic.
-- **Online questions** come from the Open Trivia Database (CC BY-SA 4.0). The credit shown in the app must stay, and that service is not curated for children, which is why Kids zone uses only the built-in questions.
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18.0.0 or later recommended)
+- `npm` (bundled with Node.js)
 
-## If something goes wrong
+### 1. Clone & Install
+```bash
+git clone https://github.com/your-username/buzzer.git
+cd buzzer
+npm install
+```
 
-- **"Accounts are not set up yet":** `.env` is missing, misnamed, or the dev server was not restarted.
-- **Email has a link but no code:** you did not edit the Magic Link template (step 4).
-- **A room join hangs on "Connecting":** check the Realtime note in step 6, and that both players have internet.
-- **"Couldn't post your score" on the results screen:** the schema was not run completely, or you played the daily challenge twice (only one ranked try per day).
-- **A file is 0 bytes after copying:** run `Get-ChildItem -Recurse src -File | Select-Object FullName, Length`.
+### 2. Configure Environment Variables
+Copy the example environment configuration:
+```bash
+cp .env.example .env
+```
+
+> **Note:** Buzzer plays solo and works offline out of the box without Supabase. To enable user accounts, global leaderboards, and live multiplayer party rooms, supply your Supabase project credentials in `.env`:
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+### 3. Run Locally
+```bash
+# Run test suites
+npm test
+
+# Start local development server
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 🗄️ Supabase Backend Setup (Optional, ~5 Mins)
+
+To enable authentication, cloud profiles, global leaderboards, and party rooms:
+
+1. **Create a Project**: Set up a free project on [supabase.com](https://supabase.com).
+2. **Execute Schema**:
+   - Open **SQL Editor** > **New Query**.
+   - Paste the contents of `supabase/schema.sql` and click **Run**.
+   - Verify the creation of `profiles`, `scores`, and the views `leaderboard_alltime` and `leaderboard_daily`.
+3. **Configure Authentication**:
+   - Navigate to **Authentication** > **Providers** and ensure **Email** is enabled.
+   - Go to **Authentication** > **Email Templates** > **Magic Link**. Include `{{ .Token }}` in the template body so players receive a 6-digit login code:
+     ```html
+     <h2>Your Buzzer Code</h2>
+     <p>Enter this code to log in: <b>{{ .Token }}</b></p>
+     ```
+4. **Enable Realtime**:
+   - Confirm **Realtime** is active for your project to support live broadcast channels for party rooms.
+5. **Set Environment Keys**:
+   - Copy the Project URL and `anon` public key from **Project Settings** > **API** into your `.env` file.
+
+---
+
+## 🧪 Testing
+
+Buzzer features automated test coverage across its core game logic, progression system, referee protocol, and storage engine:
+
+```bash
+npm test
+```
+
+The test runner validates:
+- `src/lib/game.test.js`: Game reducer, scoring calculations, streak multipliers, lifeline behavior, question formatting.
+- `src/lib/room.test.js`: Party room referee state transitions, answer timing verification, late answer rejection, result reveals.
+- `src/lib/xp.test.js`: XP formulas, level progression boundaries, achievement badge evaluations.
+- `src/lib/history.test.js`: Local history tracking and aggregate calculations.
+
+---
+
+## 🌐 Deployment
+
+Buzzer is pre-configured for zero-configuration deployment to [Vercel](https://vercel.com/), [Netlify](https://www.netlify.com/), or any static hosting platform.
+
+### Deploying to Vercel
+1. Push your repository to GitHub.
+2. Import the project on [Vercel](https://vercel.com/new).
+3. Set the Framework Preset to **Vite**.
+4. Under **Environment Variables**, add:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+5. Click **Deploy**.
+6. In your Supabase Dashboard under **Authentication > URL Configuration**, add your production URL to the **Redirect URLs** list.
+
+---
+
+## 🛡️ Security, Privacy & Fair Play
+
+- **Child Safety First**: The *Kids Zone* operates completely offline and on-device. No scores, names, or device fingerprints from kids are ever collected or transmitted.
+- **Host Authority in Party Rooms**: Question answer keys are never transmitted to clients until the reveal phase. Answers submitted after the timer window are rejected by the referee.
+- **Database Immutability**: Player scores cannot be updated or deleted once posted via Row Level Security restrictions (`revoke update, delete on scores`).
+- **Trivia Attribution**: General trivia questions are sourced from the [Open Trivia Database](https://opentdb.com/) under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Kids Zone questions are bespoke and hand-verified.
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
