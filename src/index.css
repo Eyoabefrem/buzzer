@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* Buzzer: a stage in indigo, lit with pink, yellow, cyan and lime. The light theme is "daytime". */
+:root{--bg:#1c0f4a;--deep:#12082f;--ink:#fff7e0;--muted:#b9aee6;--card:#2b1a6b;--line:rgba(255,247,224,.2);--p:#ff2e93;--y:#ffd400;--c:#19d3ff;--l:#7dff4f;--dk:#12082f}
+.light{--bg:#fff3c4;--deep:#ffe589;--ink:#1c0f4a;--muted:#5a4a99;--card:#ffffff;--line:rgba(28,15,74,.2)}
+
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,sans-serif;transition:background .3s,color .3s;overflow-x:hidden}
+.display{font-family:'Bowlby One',sans-serif;letter-spacing:.01em;line-height:1}
+.btn{display:inline-block;background:var(--y);color:var(--dk);border:4px solid var(--dk);border-radius:1rem;padding:.8rem 1.6rem;font-weight:800;box-shadow:0 6px 0 var(--dk);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--dk)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--dk)}
+.btn:disabled{opacity:.45;transform:none;box-shadow:0 6px 0 var(--dk);cursor:not-allowed}
+.btn-pink{background:var(--p)}
+.panel{background:var(--card);border:4px solid var(--dk);border-radius:1.25rem;box-shadow:0 6px 0 var(--dk)}
+
+/* Marquee bulbs that chase each other */
+.bulbs{height:16px;background:radial-gradient(circle at 8px 8px,var(--y) 5px,transparent 6px) 0 0/32px 16px repeat-x,radial-gradient(circle at 8px 8px,#fff 5px,transparent 6px) 16px 0/32px 16px repeat-x;animation:chase .8s step-end infinite}
+@keyframes chase{50%{background-position:16px 0,0 0}}
+
+/* Spotlights sweeping the stage */
+.beam{position:absolute;top:-10%;width:55%;height:140%;transform-origin:50% 0;pointer-events:none;clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);background:linear-gradient(to bottom,rgba(255,255,255,.28),transparent 80%)}
+.light .beam{background:linear-gradient(to bottom,rgba(255,255,255,.9),transparent 80%)}
+.beam-a{left:-8%;animation:sway 7s ease-in-out infinite}
+.beam-b{right:-8%;animation:sway 9s ease-in-out infinite reverse}
+@keyframes sway{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.bob{animation:bob 3.4s ease-in-out infinite}
+@keyframes shake{25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.shake{animation:shake .4s}
+@keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .45s both}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.confetti{position:fixed;top:-24px;width:10px;height:16px;animation:fall linear forwards;z-index:30;pointer-events:none}
+::selection{background:var(--p);color:#fff}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@keyframes hop{0%,100%{transform:translateY(0) scaleY(1)}30%{transform:translateY(-22px) scaleY(1.08)}60%{transform:translateY(0) scaleY(.92)}}
+.hop{animation:hop .7s ease-in-out infinite}
+@keyframes droop{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg) translateY(4px)}}
+.droop{animation:droop 2.4s ease-in-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+.ring::after{content:'';position:absolute;inset:0;border-radius:9999px;border:6px solid var(--p);animation:ring 1.6s ease-out infinite}
+.bigbuzz{background:radial-gradient(circle at 35% 28%,#ff8cc4,#ff2e93 55%,#c4106a);box-shadow:0 14px 0 #12082f,0 0 70px rgba(255,46,147,.55);transition:transform .08s,box-shadow .08s}
+.bigbuzz:hover{transform:translateY(-3px)}
+.bigbuzz:active{transform:translateY(12px);box-shadow:0 2px 0 #12082f,0 0 30px rgba(255,46,147,.4)}
+.field{background:var(--card);color:var(--ink);border:4px solid var(--dk);border-radius:.9rem;padding:.7rem 1rem;font-weight:700;font-size:1.1rem;width:100%;outline:none}
+.field:focus{box-shadow:0 0 0 4px var(--p)}

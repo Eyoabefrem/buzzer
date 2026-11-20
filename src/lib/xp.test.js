@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict'
+import { xpFor, totalXp, levelFor, levelStart, levelProgress, earned, BADGES } from './xp.js'
+
+assert.equal(xpFor({ score: 1000, correct: 6, total: 10 }), 130, 'score/10 plus 5 per right answer')
+assert.equal(xpFor({ score: 1000, correct: 10, total: 10 }), 200, 'perfect rounds earn a 50 bonus')
+assert.equal(xpFor({ score: 100, correct: 2, total: 2 }), 20, 'a 2-question round is too short for the bonus')
+assert.equal(totalXp([{ score: 100, correct: 1, total: 5 }, { score: 200, correct: 2, total: 5 }]), 15 + 30)
+assert.deepEqual([0, 39, 40, 159, 160].map(levelFor), [1, 1, 2, 2, 3])
+assert.equal(levelStart(3), 160)
+assert.deepEqual(levelProgress(100), { level: 2, into: 60, need: 120 })
+const g = (o) => ({ score: 0, correct: 0, total: 10, bestStreak: 0, categories: {}, ...o })
+assert.deepEqual(earned([]), [])
+assert.deepEqual(earned([g({})]), ['first'])
+assert.ok(earned([g({ correct: 10 })]).includes('perfect'))
+assert.ok(earned([g({ bestStreak: 10 })]).includes('streak10') && earned([g({ bestStreak: 10 })]).includes('streak5'))
+assert.ok(earned([g({ categories: { a: 1, b: 1, c: 1, d: 1, e: 1 } })]).includes('explorer'))
+assert.ok(earned([g({ mode: 'daily', day: '2025-01-01' }), g({ mode: 'daily', day: '2025-01-02' }), g({ mode: 'daily', day: '2025-01-02' })]).includes('daily3') === false, 'same day twice counts once')
+assert.ok(earned(['1', '2', '3'].map((d) => g({ mode: 'daily', day: '2025-01-0' + d }))).includes('daily3'))
+assert.equal(new Set(BADGES.map((b) => b.id)).size, BADGES.length, 'badge ids are unique')
+console.log('XP tests passed')
